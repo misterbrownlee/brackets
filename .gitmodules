@@ -10,3 +10,6 @@
 [submodule "src/thirdparty/smart-auto-complete"]
 	path = src/thirdparty/smart-auto-complete
 	url = git@github.com:laktek/jQuery-Smart-Auto-Complete.git
+[submodule "src/thirdparty/csslint"]
+	path = src/thirdparty/csslint
+	url = https://github.com/stubbornella/csslint.git
