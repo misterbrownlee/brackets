@@ -23,7 +23,7 @@
 
 
 /*jslint vars: true, plusplus: true, devel: true, nomen: true, indent: 4, maxerr: 50 */
-/*global define, $, JSLINT, PathUtils */
+/*global define, $, CSSLintUtils, PathUtils */
 
 /**
  * Allows JSLint to run on the current document and report results in a UI panel.
@@ -58,14 +58,15 @@ define(function (require, exports, module) {
         return _enabled;
     }
     
-        
+    // helper to see if we're interested in this file
     function _shouldParse(fileExtension) {
-        
-         //return /^(\.js|\.htm|\.html)$/i.test(ext));
         return (/^(\.css|\.less)$/i.test(fileExtension));
     }
     
-    
+    /**
+     * Run CSSLint on the current document. Reports results to the main UI. Displays
+     * a gold star when no errors are found.
+     */
     function run() {
         
         var currentDocument = DocumentManager.getCurrentDocument();
@@ -79,57 +80,73 @@ define(function (require, exports, module) {
         var $goldStar = $("#gold-star");
         
         if (getEnabled() && _shouldParse(extension)) {
-            //alert("current doc is " + extension);
+            
+            // TODO - do we want performance checking here?
             
             var text = currentDocument.getText();
             
+            // TODO pass ruleset specific to css or less
+            // var ruleset = getCSSRuleset(extension)
+            // var result = CSSLint.verify(text, ruleset);
+            
             var result = CSSLint.verify(text);
             
-            var $errorTable = $("<table class='zebra-striped condensed-table'>").append("<tbody>");
-            var $selectedRow;
-            
-            result.messages.forEach(function (message, i) {
-                var output = "found " + message + " (line " + message.line + ", col " + message.col + ")" + message.type;
+            if (result) {
                 
-                var makeCell = function (content) {
-                    return $("<td/>").text(content);
-                };
+                var $errorTable = $("<table class='zebra-striped condensed-table'>").append("<tbody>");
+                var $selectedRow;
             
-                // Add row to error table
-                var $row = $("<tr/>")
-                    .append(makeCell(message.line))
-                    .append(makeCell(message.col))
-                    .append(makeCell(message.message))
-                    .append(makeCell(message.type))
-                    .appendTo($errorTable);
+                result.messages.forEach(function (message, i) {
+                    
+                    if (message) {
                 
-                $row.click(function () {
-                    if ($selectedRow) {
-                        $selectedRow.removeClass("selected");
+                        var makeCell = function (content) {
+                            return $("<td/>").text(content);
+                        };
+                
+                        // Add row to error table
+                        var $row = $("<tr/>")
+                            .append(makeCell(message.line))
+                            .append(makeCell(message.col))
+                            .append(makeCell(message.message))
+                            .append(makeCell(message.type))
+                            .appendTo($errorTable);
+                        
+                        $row.click(function () {
+                            if ($selectedRow) {
+                                $selectedRow.removeClass("selected");
+                            }
+                            $row.addClass("selected");
+                            $selectedRow = $row;
+             
+                            var editor = EditorManager.getCurrentFullEditor();
+                            editor.setCursorPos(message.line - 1, message.character - 1);
+                            EditorManager.focusEditor();
+                        });
                     }
-                    $row.addClass("selected");
-                    $selectedRow = $row;
-     
-                    var editor = EditorManager.getCurrentFullEditor();
-                    editor.setCursorPos(message.line - 1, message.character - 1);
-                    EditorManager.focusEditor();
                 });
-            });
             
-            $("#csslint-results .table-container")
-                    .empty()
-                    .append($errorTable);
-            $lintResults.show();
-            $goldStar.hide();
+                $("#csslint-results .table-container")
+                        .empty()
+                        .append($errorTable);
+                $lintResults.show();
+                $goldStar.hide();
             
-            // close the error window if disabled or wrong file type
+            // close the error if there are no results from csslint
+            } else {
+                $lintResults.hide();
+                $goldStar.show();
+            }
+ 
         } else {
+            // If disabled or does not apply to the current file
+            // hide both the results and the gold star
             $lintResults.hide();
-            $goldStar.show();
+            $goldStar.hide();
         }
         
-    
- 
+        EditorManager.resizeEditor();
+        
     }
     
     
@@ -174,7 +191,6 @@ define(function (require, exports, module) {
             _setEnabled(enabled);
         }
     }
-    
     
     // Init PreferenceStorage
     _prefs = PreferencesManager.getPreferenceStorage(module.id, { enabled: true });

@@ -82,6 +82,7 @@ define(function (require, exports, module) {
     exports.DEBUG_SHOW_DEVELOPER_TOOLS  = "debug.showDeveloperTools";
     exports.DEBUG_RUN_UNIT_TESTS        = "debug.runUnitTests";
     exports.DEBUG_JSLINT                = "debug.jslint";
+    exports.DEBUG_CSSLINT               = "debug.csslint";
     exports.DEBUG_SHOW_PERF_DATA        = "debug.showPerfData";
     exports.DEBUG_NEW_BRACKETS_WINDOW   = "debug.newBracketsWindow";
     exports.DEBUG_CLOSE_ALL_LIVE_BROWSERS = "debug.closeAllLiveBrowsers";

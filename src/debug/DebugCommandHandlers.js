@@ -33,6 +33,7 @@ define(function (require, exports, module) {
         Editor                  = require("editor/Editor").Editor,
         Strings                 = require("strings"),
         JSLintUtils             = require("language/JSLintUtils"),
+        CSSLintUtils             = require("language/CSSLintUtils"),
         PerfUtils               = require("utils/PerfUtils"),
         NativeApp               = require("utils/NativeApp");
     
@@ -44,6 +45,12 @@ define(function (require, exports, module) {
         var enabled = !JSLintUtils.getEnabled();
         JSLintUtils.setEnabled(enabled);
         CommandManager.get(Commands.DEBUG_JSLINT).setChecked(enabled);
+    }
+    
+    function _handleEnableCSSLint() {
+        var enabled = !CSSLintUtils.getEnabled();
+        CSSLintUtils.setEnabled(enabled);
+        CommandManager.get(Commands.DEBUG_CSSLINT).setChecked(enabled);
     }
 
     function _handleUseTabChars() {
@@ -148,6 +155,8 @@ define(function (require, exports, module) {
     CommandManager.register(Strings.CMD_SHOW_DEV_TOOLS, Commands.DEBUG_SHOW_DEVELOPER_TOOLS, handleShowDeveloperTools);
     CommandManager.register(Strings.CMD_JSLINT,         Commands.DEBUG_JSLINT,              _handleEnableJSLint)
         .setChecked(JSLintUtils.getEnabled());
+    CommandManager.register(Strings.CMD_CSSLINT,         Commands.DEBUG_CSSLINT,              _handleEnableCSSLint)
+        .setChecked(CSSLintUtils.getEnabled());
     CommandManager.register(Strings.CMD_RUN_UNIT_TESTS, Commands.DEBUG_RUN_UNIT_TESTS,      _handleRunUnitTests);
     CommandManager.register(Strings.CMD_SHOW_PERF_DATA, Commands.DEBUG_SHOW_PERF_DATA,      _handleShowPerfData);
     CommandManager.register(Strings.CMD_EXPERIMENTAL,   Commands.DEBUG_EXPERIMENTAL,        function () {})

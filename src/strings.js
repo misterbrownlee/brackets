@@ -38,7 +38,7 @@ define(function (require, exports, module) {
      *
      * @return {string} Formatted string
      */
-    function format(str) {
+    function format (str) {
         // arguments[0] is the base string, so we need to adjust index values here
         var args = [].slice.call(arguments, 1);
         return str.replace(/\{(\d+)\}/g, function (match, num) {
@@ -171,6 +171,7 @@ define(function (require, exports, module) {
     exports.CMD_SHOW_DEV_TOOLS                  = "Show Developer Tools";
     exports.CMD_RUN_UNIT_TESTS                  = "Run Tests";
     exports.CMD_JSLINT                          = "Enable JSLint";
+    exports.CMD_CSSLINT                         = "Enable CSSLint";
     exports.CMD_SHOW_PERF_DATA                  = "Show Perf Data";
     exports.CMD_EXPERIMENTAL                    = "Experimental";
     exports.CMD_NEW_BRACKETS_WINDOW             = "New Window";

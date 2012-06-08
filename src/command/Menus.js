@@ -616,6 +616,7 @@ define(function (require, exports, module) {
         menu.addMenuItem("menu-debug-dev-tools",      Commands.DEBUG_SHOW_DEVELOPER_TOOLS);
         menu.addMenuItem("menu-debug-run-tests",      Commands.DEBUG_RUN_UNIT_TESTS);
         menu.addMenuItem("menu-debug-enable-jslint",  Commands.DEBUG_JSLINT);
+        menu.addMenuItem("menu-debug-enable-csslint",  Commands.DEBUG_CSSLINT);
         menu.addMenuItem("menu-debug-perf-data",      Commands.DEBUG_SHOW_PERF_DATA);
         menu.addMenuDivider();
         menu.addMenuItem("menu-debug-experiemental",  Commands.DEBUG_EXPERIMENTAL);
